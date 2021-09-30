@@ -25,13 +25,6 @@ linter:
 
     # The new tabs vs. spaces. Choose wisely
     prefer_single_quotes: true
-    prefer_double_quotes: true
-
-    # Good packages document everything
-    public_member_api_docs: true
-
-    # Blindly follow the Flutter code style, which prefers types everywhere
-    always_specify_types: true
 
     # Back to the 80s
     lines_longer_than_80_chars: true
