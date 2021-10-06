@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_app/home_page.dart';
+import '../../core/util/string_constants.dart';
+import '../../../home_page.dart';
 
 import '../../core/util/route_constants.dart';
-import '../../core/util/string_constants.dart';
 import '../../presentation/view/splash_screen.dart';
 
 class AppRoutes {
@@ -10,9 +10,7 @@ class AppRoutes {
     switch (settings.name) {
       case RouteConstants.homeRoute:
         return MaterialPageRoute(
-          builder: (_) => const HomePage(
-            title: StringConstants.homePageTitle,
-          ),
+          builder: (_) => const HomePage(),
         );
       case RouteConstants.splashRoute:
         return MaterialPageRoute(
@@ -23,7 +21,7 @@ class AppRoutes {
           builder: (_) => Scaffold(
             body: Center(
               child: Text(
-                'No route defined for ${settings.name}',
+                StringConstants.errorRouteText + '${settings.name}',
               ),
             ),
           ),
