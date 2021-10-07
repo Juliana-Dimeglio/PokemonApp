@@ -5,4 +5,5 @@ abstract class NumericConstants {
   static const double tweenEnd = 40.0;
   static const double tweenBegin = 0;
   static const int splashTitleDuration = 1;
+  static const int statusCode = 200;
 }
