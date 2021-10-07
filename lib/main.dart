@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'src/core/util/string_constants.dart';
 
 import 'src/config/route/app_routes.dart';
 import 'src/core/util/route_constants.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: StringConstants.mainTitle,
       theme: ThemeData.dark(),
       onGenerateRoute: AppRoutes.generateRoute,
       initialRoute: RouteConstants.splashRoute,
