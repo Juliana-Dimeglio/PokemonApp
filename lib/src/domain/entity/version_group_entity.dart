@@ -6,4 +6,11 @@ class VersionGroupEntity {
 
   final String name;
   final String url;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'name': name,
+      'url': url,
+    };
+  }
 }

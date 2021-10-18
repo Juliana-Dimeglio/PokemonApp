@@ -9,4 +9,11 @@ class OtherEntity {
 
   final DreamWorld dreamWorld;
   final OfficialArtwork officialArtwork;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'dream_world': dreamWorld.toJson(),
+      'official-artwork': officialArtwork.toJson(),
+    };
+  }
 }

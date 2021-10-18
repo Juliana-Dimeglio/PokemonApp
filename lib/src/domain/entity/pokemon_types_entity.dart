@@ -8,4 +8,11 @@ class PokemonTypesEntity {
 
   final int slot;
   final PokemonType type;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'slot': slot,
+      'type': type.toJson(),
+    };
+  }
 }

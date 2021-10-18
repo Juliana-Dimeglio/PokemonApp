@@ -8,4 +8,11 @@ class PokemonHeldItemVersionEntity {
 
   final int rarity;
   final Version version;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'rarity': rarity,
+      'version': version.toJson(),
+    };
+  }
 }
