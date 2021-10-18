@@ -11,4 +11,9 @@ abstract class StringConstants {
   static const String logoImage = 'assets/pokemon_logo.png';
   static const String noImageAvailable = 'assets/no_image_available.jpeg';
   static const String errorImage = 'assets/error_image.png';
+  static const String pokemonCollection = 'pokemon';
+  static const String statsCollection = 'stats';
+  static const String pokemonCount = 'pokemonCount';
+  static const String pokemons = 'pokemons';
+  static const String id = 'id';
 }

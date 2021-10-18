@@ -1,3 +1,4 @@
+
 import '../../domain/entity/ability_entity.dart';
 
 class Ability extends AbilityEntity {
