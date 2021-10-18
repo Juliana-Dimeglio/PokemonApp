@@ -8,4 +8,11 @@ class PokemonGameIndicesEntity {
 
   final int gameIndex;
   final VersionEntity? version;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'game_index': gameIndex,
+      'version': version!.toJson(),
+    };
+  }
 }

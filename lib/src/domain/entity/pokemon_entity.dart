@@ -49,4 +49,27 @@ class PokemonEntity {
   final List<PokemonStat> stats;
   final List<PokemonTypes> types;
   final int weight;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'abilities': abilities.map((e) => e.toJson()).toList(),
+      'base_experience': baseExperience,
+      'forms': forms.map((e) => e.toJson()).toList(),
+      'game_indices': gameIndices.map((e) => e.toJson()).toList(),
+      'height': height,
+      'held_items': heldItems.map((e) => e.toJson()).toList(),
+      'id': id,
+      'is_default': isDefault,
+      'location_area_encounters': locationAreaEncounters,
+      'moves': moves.map((e) => e.toJson()).toList(),
+      'name': name,
+      'order': order,
+      'past_types': pastTypes.map((e) => e.toJson()).toList(),
+      'species': species.toJson(),
+      'sprites': sprites.toJson(),
+      'stats': stats.map((e) => e.toJson()).toList(),
+      'types': types.map((e) => e.toJson()).toList(),
+      'weight': weight,
+    };
+  }
 }

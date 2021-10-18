@@ -4,4 +4,10 @@ class OfficialArtworkEntity {
   });
 
   final String frontDefault;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'front_default': frontDefault,
+    };
+  }
 }

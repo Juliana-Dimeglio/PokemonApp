@@ -10,4 +10,11 @@ class PokemonHeldItemsEntity {
 
   final Item item;
   final List<PokemonHeldItemVersion> versionDetails;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'item': item.toJson(),
+      'version_details': versionDetails.map((e) => e.toJson()).toList(),
+    };
+  }
 }

@@ -1,5 +1,4 @@
 import '../../data/model/version_group.dart';
-
 import '../../data/model/move_learn_method.dart';
 
 class PokemonMoveVersionEntity {
@@ -12,4 +11,12 @@ class PokemonMoveVersionEntity {
   final int levelLearnedAt;
   final MoveLearnMethod moveLearnMethod;
   final VersionGroup versionGroup;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'level_learned_at': levelLearnedAt,
+      'move_learn_method': moveLearnMethod.toJson(),
+      'version_group': versionGroup.toJson(),
+    };
+  }
 }
