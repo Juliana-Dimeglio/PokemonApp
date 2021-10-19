@@ -1,4 +1,4 @@
 abstract class RouteConstants {
-  static const String homeRoute = '/';
-  static const String splashRoute = '/splashScreen';
+  static const String homeRoute = '/homePage';
+  static const String splashRoute = '/';
 }
