@@ -15,19 +15,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final PokemonBloc _pokemonBloc = PokemonBloc();
+  late PokemonBloc _pokemonBloc;
 
   @override
   void initState() {
     super.initState();
-    _pokemonBloc.initialize();
+    _pokemonBloc = PokemonBloc();
     _pokemonBloc.fetchAllPokemons();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _pokemonBloc.dispose();
+    super.dispose();
   }
 
   Widget buildList(List<Pokemon> data) {
