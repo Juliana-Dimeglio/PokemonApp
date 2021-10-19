@@ -10,4 +10,11 @@ class PokemonPastTypesEntity {
 
   final Generation generation;
   final List<PokemonTypes> types;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'generation': generation.toJson(),
+      'types': types.map((e) => e.toJson()).toList(),
+    };
+  }
 }
