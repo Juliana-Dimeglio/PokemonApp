@@ -26,4 +26,7 @@ class PokemonHeldItems extends PokemonHeldItemsEntity {
       versionDetail: versionDetailsList,
     );
   }
+  String PokemonItemName (){
+    return item.name;
+  }
 }

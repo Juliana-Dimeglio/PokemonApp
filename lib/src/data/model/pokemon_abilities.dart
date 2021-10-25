@@ -22,4 +22,7 @@ class PokemonAbilities extends PokemonAbilitiesEntity {
       ),
     );
   }
+  String PokemonAbilityName (){
+    return ability.name;
+  }
 }

@@ -1,3 +1,4 @@
+import '../../core/util/capitalize.dart';
 import 'pokemon_species.dart';
 import 'pokemon_sprites.dart';
 import 'pokemon_abilities.dart';
@@ -30,6 +31,7 @@ class Pokemon extends PokemonEntity {
     required stats,
     required types,
     required weight,
+    evolvesTo,
   }) : super(
           abilities: abilities,
           baseExperience: baseExperience,
@@ -49,6 +51,7 @@ class Pokemon extends PokemonEntity {
           stats: stats,
           types: types,
           weight: weight,
+          evolvesTo: evolvesTo,
         );
 
   factory Pokemon.fromJson(Map<String, dynamic> parsedJson) {
@@ -90,6 +93,8 @@ class Pokemon extends PokemonEntity {
     var statList = <PokemonStat>[];
     statList = statJsonList.map((i) => PokemonStat.fromJson(i)).toList();
 
+    var _species = PokemonSpecies.fromJson(parsedJson['species']);
+
     return Pokemon(
       abilities: abilitiesList,
       baseExperience: parsedJson['base_experience'],
@@ -104,15 +109,108 @@ class Pokemon extends PokemonEntity {
       name: parsedJson['name'],
       order: parsedJson['order'],
       pastTypes: pastTypesList,
-      species: PokemonSpecies.fromJson(
-        parsedJson['species'],
-      ),
+      species: _species,
       sprites: PokemonSprites.fromJson(
         parsedJson['sprites'],
       ),
       stats: statList,
       types: typesList,
       weight: parsedJson['weight'],
+      evolvesTo:
+          parsedJson['evolves_to'] != null ? parsedJson['evolves_to'] : null,
     );
+  }
+
+  Pokemon copyWith({
+    List<PokemonAbilities>? abilities,
+    int? baseExperience,
+    List<PokemonForm>? forms,
+    List<PokemonGameIndices>? gameIndices,
+    int? height,
+    List<PokemonHeldItems>? heldItems,
+    int? id,
+    bool? isDefault,
+    String? locationAreaEncounters,
+    List<PokemonMove>? moves,
+    String? name,
+    int? order,
+    List<PokemonPastTypes>? pastTypes,
+    PokemonSpecies? species,
+    PokemonSprites? sprites,
+    List<PokemonStat>? stats,
+    List<PokemonTypes>? types,
+    int? weight,
+    String? evolvesTo,
+  }) {
+    return Pokemon(
+      abilities: abilities ?? this.abilities,
+      baseExperience: baseExperience ?? this.baseExperience,
+      forms: forms ?? this.forms,
+      gameIndices: gameIndices ?? this.gameIndices,
+      height: height ?? this.height,
+      heldItems: heldItems ?? this.heldItems,
+      id: id ?? this.id,
+      isDefault: isDefault ?? this.isDefault,
+      locationAreaEncounters:
+          locationAreaEncounters ?? this.locationAreaEncounters,
+      moves: moves ?? this.moves,
+      name: name ?? this.name,
+      order: order ?? this.order,
+      pastTypes: pastTypes ?? this.pastTypes,
+      species: species ?? this.species,
+      sprites: sprites ?? this.sprites,
+      stats: stats ?? this.stats,
+      types: types ?? this.types,
+      weight: weight ?? this.weight,
+      evolvesTo: evolvesTo ?? this.evolvesTo,
+    );
+  }
+
+  String pokemonAbilitiesNames() {
+    var _names = StringBuffer();
+    abilities.forEach(
+      (ability) {
+        _names.write(
+          ' - ' + ability.PokemonAbilityName().capitalize() + '\n',
+        );
+      },
+    );
+    return _names.toString();
+  }
+
+  String pokemonTypesNames() {
+    var _names = StringBuffer();
+    types.forEach(
+      (type) {
+        _names.write(
+          ' - ' + type.type.name.capitalize() + '\n',
+        );
+      },
+    );
+    return _names.toString();
+  }
+
+  String pokemonStatsNames() {
+    var _names = StringBuffer();
+    stats.forEach(
+      (stat) {
+        _names.write(
+          '- ' + stat.stat.name.capitalize() + ': ' + '${stat.baseStat}' + '\n',
+        );
+      },
+    );
+    return _names.toString();
+  }
+
+  String pokemonItemNames() {
+    var _names = StringBuffer();
+    heldItems.forEach(
+      (item) {
+        _names.write(
+          ' - ' + item.PokemonItemName().capitalize() + '\n',
+        );
+      },
+    );
+    return _names.toString();
   }
 }

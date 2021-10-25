@@ -7,4 +7,7 @@ class PokemonRepository extends IPokemonRepository {
 
   Future<List<Pokemon>> fetchAllPokemons() =>
       pokemonApiService.fetchPokemonList();
+
+  Future<Pokemon> fetchPokemonByName(String name) =>
+      pokemonApiService.fetchPokemonByName(name);
 }

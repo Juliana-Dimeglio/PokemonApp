@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'src/presentation/view/detail_screen.dart';
 import 'src/presentation/widget/grid_tile_pokemons.dart';
 import 'src/core/util/numeric_constants.dart';
 import 'src/core/util/string_constants.dart';
 import 'src/data/model/pokemon.dart';
 import 'src/presentation/bloc/pokemon_bloc.dart';
+import 'package:animations/animations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -37,8 +39,21 @@ class _HomePageState extends State<HomePage> {
         crossAxisCount: NumericConstants.crossAxisCount,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return GridTilePokemons(
-          pokemon: data[index],
+        return OpenContainer(
+          openColor: Colors.black,
+          transitionType: ContainerTransitionType.fadeThrough,
+          transitionDuration: Duration(seconds: 1),
+          openBuilder: (context, _) => DetailScreen(
+            pokemon: data[index],
+          ),
+          closedBuilder: (context, openContainer) => InkWell(
+            onTap: () {
+              openContainer();
+            },
+            child: GridTilePokemons(
+              pokemon: data[index],
+            ),
+          ),
         );
       },
     );
