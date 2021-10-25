@@ -16,4 +16,13 @@ abstract class StringConstants {
   static const String pokemonCount = 'pokemonCount';
   static const String pokemons = 'pokemons';
   static const String id = 'id';
+  static const String galleryText = 'Gallery: ';
+  static const String pokemonTableRowHeight = 'Height';
+  static const String pokemonTableRowWeight = 'Weight';
+  static const String pokemonTableRowBaseExperience = 'Base Experience';
+  static const String pokemonTableRowAbilities = 'Abilities';
+  static const String pokemonTableRowItems = 'Items';
+  static const String evolutionButtonText = 'Evolution';
+  static const String emptyString = '';
+  static const String pokemonByNameUrl= 'https://pokeapi.co/api/v2/pokemon/';
 }

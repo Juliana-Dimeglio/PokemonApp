@@ -29,6 +29,7 @@ class PokemonEntity {
     required this.stats,
     required this.types,
     required this.weight,
+    this.evolvesTo,
   });
 
   final List<PokemonAbilities> abilities;
@@ -49,6 +50,7 @@ class PokemonEntity {
   final List<PokemonStat> stats;
   final List<PokemonTypes> types;
   final int weight;
+  final String? evolvesTo;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -70,6 +72,7 @@ class PokemonEntity {
       'stats': stats.map((e) => e.toJson()).toList(),
       'types': types.map((e) => e.toJson()).toList(),
       'weight': weight,
+      'evolves_to': evolvesTo,
     };
   }
 }

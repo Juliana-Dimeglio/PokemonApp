@@ -7,13 +7,13 @@ class PokemonStatEntity {
     required this.stat,
   });
 
-  final int? baseStat;
+  final int baseStat;
   final int effort;
   final Stat stat;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'baseStat': baseStat,
+      'base_stat': baseStat,
       'effort': effort,
       'stat': stat.toJson(),
     };
