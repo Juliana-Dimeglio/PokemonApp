@@ -37,4 +37,17 @@ class PokemonSprites extends PokemonSpritesEntity {
       other: Other.fromJson(parsedJson['other']),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'back_default': backDefault,
+      'back_female': backFemale,
+      'back_shiny': backShiny,
+      'back_shiny_female': backShinyFemale,
+      'front_default': frontDefault,
+      'front_female': frontFemale,
+      'front_shiny': frontShiny,
+      'front_shiny_female': frontShinyFemale,
+    };
+  }
 }

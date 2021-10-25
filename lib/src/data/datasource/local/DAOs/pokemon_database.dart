@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import '../../../../domain/entity/pokemon_entity.dart';
 import '../../../../core/util/string_constants.dart';
 import '../../../model/pokemon.dart';
@@ -74,6 +73,7 @@ class PokemonDatabase {
               stats: element.stats,
               types: element.types,
               weight: element.weight,
+              evolvesTo: element.evolvesTo,
             ).toJson(),
           );
       await stats.doc(StringConstants.pokemonCount).update({
