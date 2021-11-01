@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import '../../../core/util/call_enum.dart';
 import '../../model/species_response/chain.dart';
 import '../../model/species_response/evolution_response.dart';
 import '../../model/species_response/species_response.dart';
@@ -20,14 +21,27 @@ class PokemonApiService {
     return evolvesTo;
   }
 
-  Future<List<Pokemon>> fetchPokemonList() async {
+  Future<PokemonResponse?> fetchPokemonList(Call callType,
+      [String? url]) async {
     var pokemonList = <Pokemon>[];
+    PokemonResponse? pokemonResponse;
     try {
+      var _url = '';
+      switch (callType) {
+        case Call.fetchPokemon:
+          _url = StringConstants.apiUrl;
+          break;
+        case Call.directionPage:
+          _url = url ?? '';
+          break;
+      }
       final response = await client.get(
-        Uri.parse(StringConstants.apiUrl),
+        Uri.parse(
+          _url,
+        ),
       );
       if (response.statusCode == NumericConstants.statusCode) {
-        var pokemonResponse = PokemonResponse.fromJson(
+        pokemonResponse = PokemonResponse.fromJson(
           json.decode(
             response.body,
           ),
@@ -38,14 +52,14 @@ class PokemonApiService {
             pokemonResponseJsonList[i].url,
           );
           var evolvesTo = await _getEvolvesTo(pokemon);
-
           pokemonList.add(
             pokemon.copyWith(evolvesTo: evolvesTo),
           );
         }
+        pokemonResponse.pokemonResults.addAll(pokemonList);
       }
     } catch (e) {}
-    return pokemonList;
+    return pokemonResponse;
   }
 
   Future<Pokemon> fetchPokemonByIdList(String url) async {
@@ -78,37 +92,6 @@ class PokemonApiService {
     }
   }
 
-  Future<Pokemon?> getPokemonEvolution(String url, String pokemonName) async {
-    Pokemon? pokemon;
-    try {
-      final response = await client.get(
-        Uri.parse(url),
-      );
-      if (response.statusCode == NumericConstants.statusCode) {
-        var evolutionResponse = EvolutionResponse.fromJson(
-          json.decode(
-            response.body,
-          ),
-        );
-        var pokemonEvolutionName = StringConstants.emptyString;
-        Chain chain = evolutionResponse.evolvesTo;
-        var hasEvolution = false;
-        while ((chain.evolvesTo.isNotEmpty) && !hasEvolution) {
-          if (chain.species.name == pokemonName) {
-            hasEvolution = true;
-            pokemonEvolutionName = chain.evolvesTo.first.species.name;
-          } else {
-            chain = chain.evolvesTo.first;
-          }
-        }
-        pokemon = await fetchPokemonByName(pokemonEvolutionName);
-      } else {
-        throw Exception(StringConstants.exceptionTextPokemon);
-      }
-    } catch (e) {}
-    return pokemon;
-  }
-
   Future<Pokemon> fetchPokemonByName(String name) async {
     final response = await client.get(
       Uri.parse(StringConstants.pokemonByNameUrl + '$name'),
@@ -126,7 +109,10 @@ class PokemonApiService {
     }
   }
 
-  Future<String> _getNextEvolutionName(String url, String pokemonName) async {
+  Future<String> _getNextEvolutionName(
+    String url,
+    String pokemonName,
+  ) async {
     try {
       final response = await client.get(
         Uri.parse(url),
@@ -156,3 +142,5 @@ class PokemonApiService {
     return StringConstants.emptyString;
   }
 }
+
+

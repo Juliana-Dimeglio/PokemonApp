@@ -1,0 +1,4 @@
+enum Call {
+  fetchPokemon,
+  directionPage,
+}

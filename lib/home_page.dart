@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'src/core/util/call_enum.dart';
+import 'src/data/model/pokemon_response.dart';
 import 'src/presentation/view/detail_screen.dart';
 import 'src/presentation/widget/grid_tile_pokemons.dart';
 import 'src/core/util/numeric_constants.dart';
 import 'src/core/util/string_constants.dart';
-import 'src/data/model/pokemon.dart';
 import 'src/presentation/bloc/pokemon_bloc.dart';
 import 'package:animations/animations.dart';
 
@@ -18,12 +19,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PokemonBloc _pokemonBloc;
+  late PageController _controller;
+  double currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _pokemonBloc = PokemonBloc();
-    _pokemonBloc.fetchAllPokemons();
+    _pokemonBloc = PokemonBloc()..initialize();
+    _pokemonBloc.fetchAllPokemons(Call.fetchPokemon);
+    _controller = PageController(
+      initialPage: 0,
+    );
   }
 
   @override
@@ -32,31 +38,43 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Widget buildList(List<Pokemon> data) {
-    return GridView.builder(
-      itemCount: data.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: NumericConstants.crossAxisCount,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return OpenContainer(
-          openColor: Colors.black,
-          transitionType: ContainerTransitionType.fadeThrough,
-          transitionDuration: Duration(seconds: 1),
-          openBuilder: (context, _) => DetailScreen(
-            pokemon: data[index],
-          ),
-          closedBuilder: (context, openContainer) => InkWell(
-            onTap: () {
-              openContainer();
-            },
-            child: GridTilePokemons(
-              pokemon: data[index],
-            ),
-          ),
-        );
-      },
-    );
+  Widget buildList(PokemonResponse data) {
+    return PageView.builder(
+        physics: BouncingScrollPhysics(),
+        onPageChanged: (index) {
+          _pokemonBloc.pageChange(currentPage, _controller);
+          currentPage = _controller.page!;
+          setState(() {});
+        },
+        itemCount: (data.count / 20.0).round(),
+        controller: _controller,
+        itemBuilder: (BuildContext context, int index) {
+          return GridView.builder(
+              itemCount: data.pokemonResults.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: NumericConstants.crossAxisCount,
+              ),
+              itemBuilder: (BuildContext context, index) {
+                return OpenContainer(
+                  openColor: Colors.black,
+                  transitionType: ContainerTransitionType.fadeThrough,
+                  transitionDuration: Duration(
+                    seconds: 1,
+                  ),
+                  openBuilder: (context, _) => DetailScreen(
+                    pokemon: data.pokemonResults[index],
+                  ),
+                  closedBuilder: (context, openContainer) => InkWell(
+                    onTap: () {
+                      openContainer();
+                    },
+                    child: GridTilePokemons(
+                      pokemon: data.pokemonResults[index],
+                    ),
+                  ),
+                );
+              });
+        });
   }
 
   @override
@@ -73,10 +91,10 @@ class _HomePageState extends State<HomePage> {
           ),
           centerTitle: true,
         ),
-        body: StreamBuilder<List<Pokemon>>(
+        body: StreamBuilder<PokemonResponse?>(
             stream: _pokemonBloc.allPokemonsStream,
-            builder: (context, AsyncSnapshot<List<Pokemon>> snapshot) {
-              if (snapshot.hasData) {
+            builder: (context, AsyncSnapshot<PokemonResponse?> snapshot) {
+              if (snapshot.hasData && snapshot.data != null) {
                 return buildList(
                   snapshot.data!,
                 );

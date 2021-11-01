@@ -1,27 +1,60 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import '../../core/util/call_enum.dart';
+import '../../data/model/pokemon_response.dart';
 import '../../domain/usecase/implementation/use_case_impl.dart';
 import 'i_pokemon_bloc.dart';
-import '../../data/model/pokemon.dart';
 
 class PokemonBloc extends IPokemonBloc {
   PokemonBloc();
 
-  final GetPokemonsUseCase _pokemonUseCase = GetPokemonsUseCase();
-  final _pokemonFetcher = StreamController<List<Pokemon>>.broadcast();
+  final GetPokemonsUseCase _getPokemonsUseCase = GetPokemonsUseCase();
+  final _pokemonFetcher = StreamController<PokemonResponse?>.broadcast();
+  late String nextPage;
+  late String previousPage;
 
-  Stream<List<Pokemon>> get allPokemonsStream => _pokemonFetcher.stream;
+  Stream<PokemonResponse?> get allPokemonsStream => _pokemonFetcher.stream;
 
   @override
-  void fetchAllPokemons() async {
-    List<Pokemon> pokemonList = await _pokemonUseCase.call();
-    _pokemonFetcher.sink.add(pokemonList);
+  void initialize() {
+    _pokemonFetcher.stream.listen((pokemonResponse) {
+      nextPage = pokemonResponse?.next ?? '';
+      previousPage = pokemonResponse?.previous ?? '';
+    });
   }
-
-  @override
-  void initialize() {}
 
   @override
   void dispose() {
     _pokemonFetcher.close();
+  }
+
+  @override
+  void fetchAllPokemons(Call callType, [String? url]) async {
+    PokemonResponse? pokemonResponse = await _getPokemonsUseCase.call(
+      callType,
+      url,
+    );
+    _pokemonFetcher.sink.add(pokemonResponse);
+  }
+
+  void pageChange(
+    double currentPage,
+    PageController _controller,
+  ) {
+    if (currentPage < _controller.page!) {
+      if (nextPage.isNotEmpty) {
+        fetchAllPokemons(
+          Call.directionPage,
+          nextPage,
+        );
+      }
+    } else {
+      if (previousPage.isNotEmpty) {
+        fetchAllPokemons(
+          Call.directionPage,
+          previousPage,
+        );
+      }
+    }
   }
 }
