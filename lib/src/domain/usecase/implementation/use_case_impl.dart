@@ -1,22 +1,34 @@
+import '../../../core/util/call_enum.dart';
+import '../../../data/model/pokemon_response.dart';
 import '../../../data/datasource/local/DAOs/pokemon_database.dart';
-import '../../../data/model/pokemon.dart';
 import '../../../data/repository/repository_impl.dart';
 import '../use_case_interface.dart';
 
-class GetPokemonsUseCase implements UseCase<List<Pokemon>> {
+class GetPokemonsUseCase implements UseCase<PokemonResponse?> {
   GetPokemonsUseCase();
 
-  final PokemonDatabase _pokemonDatabase = PokemonDatabase.singleton;
+  final PokemonDatabase _pokemonDatabase = PokemonDatabase();
   final PokemonRepository _pokemonRepository = PokemonRepository();
 
   @override
-  Future<List<Pokemon>> call() async {
-    final List<Pokemon> pokemonList =
-        await _pokemonRepository.fetchAllPokemons();
-    if (pokemonList.isNotEmpty) {
+  Future<PokemonResponse?> call(Call callType, [String? url]) async {
+    final PokemonResponse? pokemonList =
+        await _pokemonRepository.fetchAllPokemons(
+      callType,
+      url,
+    );
+    if (pokemonList?.pokemonResults.isNotEmpty == true &&
+        callType == Call.fetchPokemon) {
       await _pokemonDatabase.clearDatabase();
-      await _pokemonDatabase.addPokemonToFirebase(pokemonList);
+      await _pokemonDatabase.addPokemonToFirebase(
+        pokemonList!.pokemonResults,
+      );
     }
-    return _pokemonDatabase.fetchPokemonList();
+    return pokemonList;
+  }
+
+  @override
+  Future<PokemonResponse?> evolutionCall() {
+    throw UnimplementedError();
   }
 }

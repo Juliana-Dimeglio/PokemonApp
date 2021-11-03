@@ -4,16 +4,7 @@ import '../../../../core/util/string_constants.dart';
 import '../../../model/pokemon.dart';
 
 class PokemonDatabase {
-  factory PokemonDatabase() => singleton;
-
-  PokemonDatabase._create();
-
-  static Future<PokemonDatabase> internal() async {
-    var pokemonDatabase = PokemonDatabase._create();
-    return pokemonDatabase;
-  }
-
-  static PokemonDatabase singleton = PokemonDatabase._create();
+  PokemonDatabase();
 
   FirebaseFirestore get firestoreInstance => FirebaseFirestore.instance;
 

@@ -34,7 +34,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Future<Pokemon> getPokemonEvolution() async {
     pokemonEvolution = await GetEvolutionsUseCase(
       name: _pokemon.evolvesTo!,
-    ).call();
+    ).evolutionCall();
     return pokemonEvolution;
   }
 
