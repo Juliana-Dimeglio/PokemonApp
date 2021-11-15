@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../numeric_constants.dart';
 
 final backgroundColor = LinearGradient(
   colors: [
@@ -11,3 +12,18 @@ final backgroundColor = LinearGradient(
   tileMode: TileMode.clamp,
 );
 final evolutionButtonColor = Color(0xFFDE3B3B);
+final firstPageColor = Color(0xFF3466AF);
+final secondPageColor = Color(0xFFFFCC03);
+final pageTextStyleBorder = TextStyle(
+  fontFamily: 'Pokemon',
+  fontSize: NumericConstants.pageTextFontSize,
+  foreground: Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = NumericConstants.pageForegroundStrokeWidth
+    ..color = firstPageColor,
+);
+final pageTextStyle = TextStyle(
+  fontFamily: 'Pokemon',
+  fontSize: NumericConstants.pageTextFontSize,
+  color: secondPageColor,
+);

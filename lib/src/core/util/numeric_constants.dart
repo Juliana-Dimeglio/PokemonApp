@@ -30,4 +30,9 @@ abstract class NumericConstants {
   static const double evolutionButtonFontSize = 20;
   static const double tableRowPadding = 6.0;
   static const double tableRowFontSize = 20;
+  static const double loaderImageSize = 200;
+  static const double loaderTextSize = 20;
+  static const double maxCantPokemonPage = 20;
+  static const double pageTextFontSize = 25;
+  static const double pageForegroundStrokeWidth = 6;
 }

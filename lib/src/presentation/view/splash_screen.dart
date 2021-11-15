@@ -1,34 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../core/util/numeric_constants.dart';
-import '../../core/util/route_constants.dart';
 import '../../core/util/string_constants.dart';
 import '../widget/splash_title_animation.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _navigateToHome();
-  }
-
-  Future<void> _navigateToHome() async {
-    await Future.delayed(
-        const Duration(
-          milliseconds: NumericConstants.splashScreenGifDuration,
-        ), () {
-      Navigator.of(context).pushReplacementNamed(
-        RouteConstants.homeRoute,
-      );
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
