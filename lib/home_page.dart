@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'src/presentation/widget/pokemon_page_button.dart';
+import 'src/core/util/styles/styles.dart';
+import 'src/presentation/view/splash_screen.dart';
+import 'src/presentation/widget/state_widget/pokemon_state.dart';
 import 'src/core/util/call_enum.dart';
-import 'src/data/model/pokemon_response.dart';
-import 'src/presentation/view/detail_screen.dart';
-import 'src/presentation/widget/grid_tile_pokemons.dart';
+import 'src/presentation/bloc/model/state_model.dart';
 import 'src/core/util/numeric_constants.dart';
 import 'src/core/util/string_constants.dart';
 import 'src/presentation/bloc/pokemon_bloc.dart';
-import 'package:animations/animations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -18,18 +19,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const initialPageNumber = 1;
   late PokemonBloc _pokemonBloc;
-  late PageController _controller;
-  double currentPage = 0;
+  late int pageNumber;
+  late int? cantPages;
 
   @override
   void initState() {
     super.initState();
     _pokemonBloc = PokemonBloc()..initialize();
     _pokemonBloc.fetchAllPokemons(Call.fetchPokemon);
-    _controller = PageController(
-      initialPage: 0,
-    );
+    pageNumber = initialPageNumber;
   }
 
   @override
@@ -38,76 +38,85 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Widget buildList(PokemonResponse data) {
-    return PageView.builder(
-        physics: BouncingScrollPhysics(),
-        onPageChanged: (index) {
-          _pokemonBloc.pageChange(currentPage, _controller);
-          currentPage = _controller.page!;
-          setState(() {});
-        },
-        itemCount: (data.count / 20.0).round(),
-        controller: _controller,
-        itemBuilder: (BuildContext context, int index) {
-          return GridView.builder(
-              itemCount: data.pokemonResults.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: NumericConstants.crossAxisCount,
-              ),
-              itemBuilder: (BuildContext context, index) {
-                return OpenContainer(
-                  openColor: Colors.black,
-                  transitionType: ContainerTransitionType.fadeThrough,
-                  transitionDuration: Duration(
-                    seconds: 1,
-                  ),
-                  openBuilder: (context, _) => DetailScreen(
-                    pokemon: data.pokemonResults[index],
-                  ),
-                  closedBuilder: (context, openContainer) => InkWell(
-                    onTap: () {
-                      openContainer();
-                    },
-                    child: GridTilePokemons(
-                      pokemon: data.pokemonResults[index],
-                    ),
-                  ),
-                );
-              });
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.red.shade900,
-          title: Image.asset(
-            StringConstants.logoImage,
-            width: NumericConstants.logoImageWidth,
+      child: StreamBuilder<StateModel>(
+          stream: _pokemonBloc.allPokemonsStream,
+          initialData: StateModel(
+            state: StateType.splashScreen,
           ),
-          centerTitle: true,
-        ),
-        body: StreamBuilder<PokemonResponse?>(
-            stream: _pokemonBloc.allPokemonsStream,
-            builder: (context, AsyncSnapshot<PokemonResponse?> snapshot) {
-              if (snapshot.hasData && snapshot.data != null) {
-                return buildList(
-                  snapshot.data!,
-                );
-              } else if (snapshot.hasError) {
-                return Text(
-                  snapshot.error.toString(),
-                );
-              }
-              return Center(
-                child: CircularProgressIndicator(),
+          builder: (context, snapshot) {
+            cantPages = ((snapshot.data?.response?.count ?? 0) /
+                    NumericConstants.maxCantPokemonPage)
+                .round();
+            if (snapshot.data?.state == StateType.splashScreen) {
+              return SplashScreen();
+            } else {
+              return Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.red.shade900,
+                  title: Image.asset(
+                    StringConstants.logoImage,
+                    width: NumericConstants.logoImageWidth,
+                  ),
+                  centerTitle: true,
+                ),
+                body: PokemonState(
+                  stateModel: snapshot.data!,
+                  pokemonBloc: _pokemonBloc,
+                ),
+                bottomNavigationBar: Container(
+                  color: Colors.red.shade900,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      PokemonPageButton(
+                        function: pageNumber != initialPageNumber
+                            ? () {
+                                _pokemonBloc.getPreviousPage();
+                                pageNumber--;
+                                setState(() {});
+                              }
+                            : () {},
+                        icon: Icons.arrow_back,
+                      ),
+                      snapshot.data?.state == StateType.loading
+                          ? Text(
+                              StringConstants.emptyString,
+                            )
+                          : Stack(
+                              children: [
+                                Text(
+                                  StringConstants.pageText +
+                                      ' $pageNumber - $cantPages',
+                                  style: pageTextStyleBorder,
+                                ),
+                                Text(
+                                  StringConstants.pageText +
+                                      ' $pageNumber - $cantPages',
+                                  style: pageTextStyle,
+                                ),
+                              ],
+                            ),
+                      PokemonPageButton(
+                        function: pageNumber != cantPages
+                            ? () {
+                                _pokemonBloc.getNextPage();
+                                pageNumber++;
+                                setState(() {});
+                              }
+                            : () {},
+                        icon: Icons.arrow_forward,
+                      ),
+                    ],
+                  ),
+                ),
               );
-            }),
-      ),
+            }
+          }),
     );
   }
 }
