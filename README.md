@@ -1,15 +1,18 @@
-# pokemon_app
+# Pokemon App
 
-A new Flutter project.
+This is an onboarding project for Flutter development, using Firebase, Bloc Pattern, Clean Architecture, Lint and consuming an API.
 
-## Getting Started
+## Preview
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+https://github.com/user-attachments/assets/e4e3b335-c7ba-41ee-962a-ea3f6c0e265d
+
+
+
+https://github.com/user-attachments/assets/989c86b1-aa43-4ea0-9f6a-626267aced03
+
+
 
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
